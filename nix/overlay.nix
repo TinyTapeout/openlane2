@@ -27,7 +27,7 @@ new: old: {
     else (old.jshon);
   
   magic = old.magic.override {
-    version = "8.3.520";
-    sha256 = "sha256-RrrZHl05dQwvBGrBKxvONZSVEufIdQTJd67isauum6g=";
+    rev = "6e83cbe2d3348971c6b4d95b6a28eb28d446a8d2";
+    sha256 = "sha256-yviA36C4KkGNM56rvZvPBi5huvKDO5Z4DG9gO5tKYCA=";
   };
 }
