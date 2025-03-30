@@ -445,11 +445,24 @@ class DRC(KLayoutStep):
         input_view = state_in[DesignFormat.GDS]
         assert isinstance(input_view, Path)
 
-        density = (
-            "true" if self.config["KLAYOUT_DRC_OPTIONS"].get("density") else "false"
-        )
+        opts = []
+        for k, v in self.config["KLAYOUT_DRC_OPTIONS"].items():
+            opts.extend(
+                [
+                    "-rd",
+                    f"{k}={v}",
+                ]
+            )
+
         threads = self.config["KLAYOUT_DRC_THREADS"] or (str(os.cpu_count()) or "1")
         info(f"Running KLayout DRC with {threads} threads…")
+        if threads != "1":
+            opts.extend(
+                [
+                    "-rd",
+                    f"threads={threads}",
+                ]
+            )
 
         # Not pya script - DRC script is not part of OpenLane
         self.run_subprocess(
@@ -463,10 +476,7 @@ class DRC(KLayoutStep):
                 f"in_gds={abspath(input_view)}",
                 "-rd",
                 f"report_file={abspath(xml_report)}",
-                "-rd",
-                f"density={density}",
-                "-rd",
-                f"threads={threads}",
+                *opts,
             ]
         )
 
